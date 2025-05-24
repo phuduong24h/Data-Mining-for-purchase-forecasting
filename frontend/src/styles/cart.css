@@ -1,0 +1,144 @@
+.cart {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cart__header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart__title {
+  margin: 0;
+}
+
+.cart__back-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  transition: all 0.3s;
+}
+
+.cart__back-button--hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.cart__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.cart__thead {
+}
+
+.cart__row {
+}
+
+.cart__th,
+.cart__cell {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.cart__th {
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #ddd;
+}
+
+.cart__img-cell {
+  width: 60px;
+}
+
+.cart__img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cart__cell--center {
+  text-align: center;
+  font-weight: 600;
+}
+
+.cart__cell--right {
+  text-align: right;
+}
+
+.cart__total-row {
+}
+
+.cart__total-label {
+  font-weight: 700;
+  font-size: 18px;
+  text-align: right;
+}
+
+.cart__total-value {
+  font-weight: 700;
+  font-size: 18px;
+  text-align: right;
+}
+
+.cart__checkout-button {
+  width: 100%;
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cart__checkout-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cart__checkout-button--hover {
+  background-color: #0056b3;
+}
+
+.cart__empty {
+  text-align: center;
+  font-size: 18px;
+}
+
+.cart__remove-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.cart__remove-button:hover {
+  background-color: #cc3a3f;
+}

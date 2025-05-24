@@ -1,10 +1,17 @@
 import React from "react";
-import ProductSuggester from "./suggestions";
+import { Routes, Route } from "react-router-dom";
+import ProductSuggester from "./pages/suggestions";
+import LoginForm from "./pages/LoginForm";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <ProductSuggester />
+    <div className=" bg-gray-100">
+      <Routes>
+        <Route path="/" element={<ProductSuggester />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/cart" element={<Cart />} />
+      </Routes>
     </div>
   );
 }
