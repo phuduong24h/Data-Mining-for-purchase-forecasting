@@ -1,46 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/index.css";
+import { categories } from "../constants/categories";
 
 const ProductSuggester = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Danh mục và sản phẩm
-  const categories = [
-    {
-      title: "Laptop",
-      items: [
-        { name: "Laptop Dell", image: "/images/laptop.jpg", price: 1000 },
-        { name: "Laptop HP", image: "/images/laptop.jpg", price: 1000 },
-      ],
-    },
-    {
-      title: "Mouse",
-      items: [
-        { name: "Mouse acs", image: "/images/mouse.jpg", price: 1000 },
-        { name: "Keyboard", image: "/images/keyboard.jpg", price: 1000 },
-        { name: "Headphones", image: "/images/headphone.jpg", price: 1000 },
-      ],
-    },
-    {
-      title: "Keyboard",
-      items: [
-        { name: "Keyboard LG", image: "/images/monitor.jpg", price: 1000 },
-        { name: "Keyboard Samsung", image: "/images/monitor.jpg", price: 1000 },
-      ],
-    },
-    {
-      title: "Monitor",
-      items: [
-        { name: "Monitor LG", image: "/images/monitor.jpg", price: 1000 },
-        { name: "Monitor Samsung", image: "/images/monitor.jpg", price: 1000 },
-      ],
-    },
-  ];
-
-  // Lấy danh mục dựa trên sản phẩm trong giỏ hàng
   const getCategoriesFromCart = (cartItems) => {
     const categoriesSet = new Set();
 
@@ -70,7 +38,6 @@ const ProductSuggester = () => {
       if (cartItems.length > 0) {
         selectedCategories = getCategoriesFromCart(cartItems);
       } else {
-        // Nếu giỏ hàng trống, lấy tất cả danh mục làm mặc định
         selectedCategories = categories.map((c) => c.title);
       }
 
@@ -92,7 +59,26 @@ const ProductSuggester = () => {
         const data = await response.json();
         setSuggestions(data);
 
-        // Tự động chọn checkbox các sản phẩm gợi ý
+        // Lấy tất cả item từ nhiều gợi ý
+        const allItems = data.flatMap((sug) => sug.items);
+
+        // Đếm tần suất từng item
+        const itemCount = {};
+        allItems.forEach((item) => {
+          itemCount[item] = (itemCount[item] || 0) + 1;
+        });
+
+        // Tìm item có tần suất cao nhất
+        const topItem = Object.entries(itemCount).reduce(
+          (max, curr) => (curr[1] > max[1] ? curr : max),
+          ["", 0]
+        );
+
+        console.log("🎯 Item gợi ý nhiều nhất:", topItem[0]);
+
+        // Nếu bạn muốn lưu lại để sử dụng:
+        // setTopSuggestedItem(topItem[0]);
+
         const allSuggestedProducts = data.flatMap((sug) => sug.items);
         setSelectedItems(allSuggestedProducts);
       } catch (err) {
@@ -101,9 +87,8 @@ const ProductSuggester = () => {
     };
 
     getSuggestions();
-  }, [cartItems]); // Chạy lại khi cartItems thay đổi
+  }, [cartItems]);
 
-  // Toggle chọn sản phẩm trong danh sách chọn (checkbox)
   const toggleSelection = (productName) => {
     setSelectedItems((prev) =>
       prev.includes(productName)
@@ -112,7 +97,6 @@ const ProductSuggester = () => {
     );
   };
 
-  // Thêm sản phẩm vào giỏ hàng localStorage và cập nhật state cartItems
   const handleAddToCart = (product) => {
     const cart = [...cartItems];
     const isExist = cart.find((item) => item.name === product.name);
@@ -127,25 +111,64 @@ const ProductSuggester = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div className="product-suggester">
-      <header className="product-suggester__header">
-        <h1 className="product-suggester__title">Cửa hàng Thế Giới Sản Phẩm</h1>
-        <div className="product-suggester__header-buttons">
-          <button className="product-suggester__button">
-            <Link to="/login">Đăng nhập</Link>
-          </button>
-          <button className="product-suggester__button">
-            <Link to="/cart">🛒 Giỏ hàng</Link>
-          </button>
-        </div>
-      </header>
+      <div className="product-suggester__search-bar">
+        <input
+          type="text"
+          placeholder="Tìm sản phẩm..."
+          value={searchTerm}
+          onChange={handleInputChange}
+          className="product-suggester__search-input"
+        />
+        <button
+          className="product-suggester_btn-clear"
+          onClick={() => setSearchTerm("")}
+        >
+          Xoá
+        </button>
+      </div>
 
-      {/* Hiển thị sản phẩm trong giỏ hàng */}
-      <div
-        className="product-suggester__cart-items"
-        style={{ marginTop: "120px" }}
-      >
+      {searchTerm && (
+        <div className="product-suggester__search-results">
+          <h2 className="product-suggester__search-title">Kết quả tìm kiếm:</h2>
+          <div className="product-suggester__products-list product-suggester__products-list--horizontal">
+            {categories
+              .flatMap((cat) => cat.items)
+              .filter((item) =>
+                item.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((product) => (
+                <div
+                  key={product.name}
+                  className="product-suggester__product-item"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="product-suggester__product-image"
+                  />
+                  <span className="product-suggester__product-name">
+                    {product.name}
+                  </span>
+                  <button
+                    className="product-suggester__add-button"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Thêm vào giỏ hàng
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/*   
+      <div className="product-suggester__cart-items">
         <h2 className="product-suggester__cart-title">
           Sản phẩm trong giỏ hàng:
         </h2>
@@ -162,54 +185,7 @@ const ProductSuggester = () => {
             Giỏ hàng hiện đang trống.
           </p>
         )}
-      </div>
-
-      {/* Danh sách sản phẩm để chọn (checkbox) */}
-      <div style={{ marginTop: "550px" }}>
-        {categories.map((category) => (
-          <div key={category.title} className="product-suggester__category">
-            <h2 className="product-suggester__category-title">
-              {category.title}
-            </h2>
-            <div className="product-suggester__products-list product-suggester__products-list--horizontal">
-              {category.items.map((product) => (
-                <div
-                  key={product.name}
-                  className={`product-suggester__product-item ${
-                    selectedItems.includes(product.name)
-                      ? "product-suggester__product-item--selected"
-                      : ""
-                  }`}
-                >
-                  <label className="product-suggester__product-label">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(product.name)}
-                      onChange={() => toggleSelection(product.name)}
-                      className="product-suggester__product-checkbox"
-                    />
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="product-suggester__product-image"
-                    />
-                    <span className="product-suggester__product-name">
-                      {product.name}
-                    </span>
-                  </label>
-
-                  <button
-                    className="product-suggester__add-button"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    Thêm vào giỏ hàng
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      </div> */}
 
       {/* Hiển thị danh sách gợi ý */}
       <section className="product-suggester__suggestions">
@@ -288,6 +264,53 @@ const ProductSuggester = () => {
             })()}
         </div>
       </section>
+
+      {/* Danh sách sản phẩm để chọn (checkbox) */}
+      <div>
+        {categories.map((category) => (
+          <div key={category.title} className="product-suggester__category">
+            <h2 className="product-suggester__category-title">
+              {category.title}
+            </h2>
+            <div className="product-suggester__products-list product-suggester__products-list--horizontal">
+              {category.items.map((product) => (
+                <div
+                  key={product.name}
+                  className={`product-suggester__product-item ${
+                    selectedItems.includes(product.name)
+                      ? "product-suggester__product-item--selected"
+                      : ""
+                  }`}
+                >
+                  <label className="product-suggester__product-label">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(product.name)}
+                      onChange={() => toggleSelection(product.name)}
+                      className="product-suggester__product-checkbox"
+                    />
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="product-suggester__product-image"
+                    />
+                    <span className="product-suggester__product-name">
+                      {product.name}
+                    </span>
+                  </label>
+
+                  <button
+                    className="product-suggester__add-button"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Thêm vào giỏ hàng
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
