@@ -194,9 +194,36 @@ const ProductSuggester = () => {
         </h2>
         <div className="product-suggester__suggestions-container product-suggester__products-list--horizontal">
           {suggestions.length === 0 && (
-            <p className="product-suggester__suggestions-empty">
-              Chưa có gợi ý nào.
-            </p>
+            <>
+              {(() => {
+                const defaultCategory = categories.find(
+                  (c) => c.title === "Tablet"
+                );
+                if (!defaultCategory) return null;
+
+                return defaultCategory.items.map((product) => (
+                  <div
+                    key={product.name}
+                    className="product-suggester__product-item"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="product-suggester__product-image"
+                    />
+                    <span className="product-suggester__product-name">
+                      {product.name}
+                    </span>
+                    <button
+                      className="product-suggester__add-button"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      Thêm vào giỏ hàng
+                    </button>
+                  </div>
+                ));
+              })()}
+            </>
           )}
 
           {suggestions.length > 0 &&

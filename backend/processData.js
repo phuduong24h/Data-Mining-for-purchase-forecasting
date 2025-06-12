@@ -44,7 +44,7 @@ const processData = async () => {
       }, [])
       .map((item) => item.products);
 
-    const fpgrowth = new FPGrowth(0.02); // min support 2%
+    const fpgrowth = new FPGrowth(0.02);
     const itemsets = await fpgrowth.exec(transactions);
 
     itemsetsCache = itemsets;

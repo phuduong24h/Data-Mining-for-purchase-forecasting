@@ -4,14 +4,16 @@ export const categories = [
     items: [
       { name: "Laptop Dell", image: "/images/laptop.jpg", price: 1000 },
       { name: "Laptop HP", image: "/images/laptop.jpg", price: 1000 },
+      { name: "Laptop MSI", image: "/images/laptop.jpg", price: 1000 },
+      { name: "Laptop ASUS", image: "/images/laptop.jpg", price: 1000 },
     ],
   },
   {
     title: "Mouse",
     items: [
       { name: "Mouse acs", image: "/images/mouse.jpg", price: 1000 },
-      { name: "Keyboard", image: "/images/mouse.jpg", price: 1000 },
-      { name: "Headphones", image: "/images/mouse.jpg", price: 1000 },
+      { name: "Mouse MSI", image: "/images/mouse.jpg", price: 1000 },
+      { name: "Mouse Logitech", image: "/images/mouse.jpg", price: 1000 },
     ],
   },
   {
@@ -19,6 +21,8 @@ export const categories = [
     items: [
       { name: "Keyboard LG", image: "/images/keyboard.jpg", price: 1000 },
       { name: "Keyboard Samsung", image: "/images/keyboard.jpg", price: 1000 },
+      { name: "Keyboard MSI", image: "/images/keyboard.jpg", price: 1000 },
+      { name: "Keyboard ASUS", image: "/images/keyboard.jpg", price: 1000 },
     ],
   },
   {
@@ -32,12 +36,22 @@ export const categories = [
     title: "Webcam",
     items: [
       {
-        name: "Headphones Sony",
+        name: "Webcam Logitech",
         image: "/images/Webcam-Logitech-1.jpg",
         price: 1000,
       },
       {
-        name: "Headphones Bose",
+        name: "Webcam Microsoft",
+        image: "/images/Webcam-Logitech-2.jpg",
+        price: 1000,
+      },
+      {
+        name: "Webcam Digital",
+        image: "/images/Webcam-Logitech-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "Webcam ASUS HD",
         image: "/images/Webcam-Logitech-2.jpg",
         price: 1000,
       },
@@ -47,13 +61,18 @@ export const categories = [
     title: "External Hard Drive",
     items: [
       {
-        name: "Webcam Logitech",
+        name: "External Hard Drive",
         image: "/images/External-hard-drive.jpg",
         price: 1000,
       },
       {
-        name: "Webcam Microsoft",
+        name: "External Hard Drive",
         image: "/images/External-hard-drive-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "External Hard 2.0TB",
+        image: "/images/External-hard-drive.jpg",
         price: 1000,
       },
     ],
@@ -62,12 +81,22 @@ export const categories = [
     title: "USB Flash Drive",
     items: [
       {
-        name: "External Hard Drive Seagate",
+        name: "USB Flash Drive SanDisk",
         image: "/images/USB-Flash-Drive.jpg",
         price: 1000,
       },
       {
-        name: "External Hard Drive WD",
+        name: "USB Flash Drive Kingston",
+        image: "/images/USB-Flash-Drive-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "USB Flash Drive 2.0TB Kingston",
+        image: "/images/USB-Flash-Drive.jpg",
+        price: 1000,
+      },
+      {
+        name: "USB Flash Drive ASUS SanDisk",
         image: "/images/USB-Flash-Drive-1.jpg",
         price: 1000,
       },
@@ -77,12 +106,12 @@ export const categories = [
     title: "Printer",
     items: [
       {
-        name: "USB Flash Drive SanDisk",
+        name: "Printer HP",
         image: "/images/Printer-1.jpg",
         price: 1000,
       },
       {
-        name: "USB Flash Drive Kingston",
+        name: "Printer Canon",
         image: "/images/Printer-2.jpg",
         price: 1000,
       },
@@ -91,27 +120,67 @@ export const categories = [
   {
     title: "VR Headset",
     items: [
-      { name: "Printer HP", image: "/images/VR-Headset-2.jpg", price: 1000 },
-      { name: "Printer Canon", image: "/images/VR-Headset-1.jpg", price: 1000 },
+      {
+        name: "VR Headset Oculus",
+        image: "/images/VR-Headset-2.jpg",
+        price: 1000,
+      },
+      {
+        name: "VR Headset HTC",
+        image: "/images/VR-Headset-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "VR Headset Oculus",
+        image: "/images/VR-Headset-2.jpg",
+        price: 1000,
+      },
+      {
+        name: "VR Headset HTC",
+        image: "/images/VR-Headset-1.jpg",
+        price: 1000,
+      },
     ],
   },
   {
     title: "Tablet",
     items: [
-      { name: "VR Headset Oculus", image: "/images/tablet-1.jpg", price: 1000 },
-      { name: "VR Headset HTC", image: "/images/tablet-2.jpg", price: 1000 },
+      { name: "Tablet iPad", image: "/images/tablet-1.jpg", price: 1000 },
+      { name: "Tablet Samsung", image: "/images/tablet-2.jpg", price: 1000 },
+      { name: "Tablet iPad gen9", image: "/images/tablet-1.jpg", price: 1000 },
+      {
+        name: "Tablet Samsung Se",
+        image: "/images/tablet-2.jpg",
+        price: 1000,
+      },
+      { name: "Tablet iPad gen10", image: "/images/tablet-1.jpg", price: 1000 },
+      {
+        name: "Tablet Samsung tab7",
+        image: "/images/tablet-2.jpg",
+        price: 1000,
+      },
     ],
   },
   {
     title: "Bluetooth Speaker",
     items: [
       {
-        name: "Tablet iPad",
+        name: "Loa JBL Charge 6",
         image: "/images/Bluetooth-Speaker-1.jpg",
         price: 1000,
       },
       {
-        name: "Tablet Samsung",
+        name: "Loa JBL Flip 7",
+        image: "/images/Bluetooth-Speaker-2.jpg",
+        price: 1000,
+      },
+      {
+        name: "Loa JBL Charge 2.0",
+        image: "/images/Bluetooth-Speaker-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "Loa JBL Flip IBO",
         image: "/images/Bluetooth-Speaker-2.jpg",
         price: 1000,
       },
@@ -127,6 +196,16 @@ export const categories = [
       },
       {
         name: "Smartphone Samsung",
+        image: "/images/Smartphone-2.jpg",
+        price: 1000,
+      },
+      {
+        name: "Smartphone iPhoneS",
+        image: "/images/Smartphone-1.jpg",
+        price: 1000,
+      },
+      {
+        name: "Smartphone Realme",
         image: "/images/Smartphone-2.jpg",
         price: 1000,
       },
@@ -151,12 +230,12 @@ export const categories = [
     title: "Router",
     items: [
       {
-        name: "Gaming Console PS5",
+        name: "Router TP-Link",
         image: "/images/Router-1.jpg",
         price: 1000,
       },
       {
-        name: "Gaming Console Xbox",
+        name: "Router Netgear",
         image: "/images/Router-2.jpg",
         price: 1000,
       },
