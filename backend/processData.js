@@ -3,6 +3,7 @@ const path = require("path");
 const csv = require("csv-parser");
 const FPGrowth = require("node-fpgrowth").FPGrowth;
 
+// Đọc dữ liệu từ file CSV và chuyển thành mảng các object JSON
 const readCSV = (filePath) => {
   return new Promise((resolve, reject) => {
     const results = [];
@@ -14,6 +15,7 @@ const readCSV = (filePath) => {
   });
 };
 
+//Làm sạch dữ liệu đầu vào
 const cleanData = (data) => {
   return data.filter(
     (row) =>
@@ -26,12 +28,14 @@ const cleanData = (data) => {
   );
 };
 
+//Xử lý toàn bộ dữ liệu để khai thác luật kết hợp
 const processData = async () => {
   try {
     const data = await readCSV(
       path.join(__dirname, "data", "cleaned_online_retail.csv")
     );
     const cleanedData = cleanData(data);
+
     const transactions = cleanedData
       .reduce((acc, row) => {
         const invoice = acc.find((item) => item.invoiceNo === row.InvoiceNo);
@@ -55,6 +59,7 @@ const processData = async () => {
   }
 };
 
+// Hàm: Gợi ý sản phẩm dựa trên danh sách sản phẩm đã chọn
 const getSuggestions = (selectedItems) => {
   return itemsetsCache
     .filter(

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/index.css";
 import { categories } from "../constants/categories";
 
@@ -8,10 +8,10 @@ const ProductSuggester = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const getCategoriesFromCart = (cartItems) => {
     const categoriesSet = new Set();
-
     categories.forEach((category) => {
       const hasProductInCart = category.items.some((item) =>
         cartItems.some((cartItem) => cartItem.name === item.name)
@@ -20,17 +20,14 @@ const ProductSuggester = () => {
         categoriesSet.add(category.title);
       }
     });
-
     return Array.from(categoriesSet);
   };
 
-  // Lấy sản phẩm trong giỏ hàng từ localStorage, cập nhật state khi component mount
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(storedCart);
   }, []);
 
-  // Tự động gọi API gợi ý mỗi khi cartItems thay đổi
   useEffect(() => {
     const getSuggestions = async () => {
       let selectedCategories = [];
@@ -41,43 +38,17 @@ const ProductSuggester = () => {
         selectedCategories = categories.map((c) => c.title);
       }
 
-      console.log("Selected categories for suggestion:", selectedCategories);
-
       try {
         const response = await fetch("http://localhost:3000/api/suggest", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ selectedItems: selectedCategories }),
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to get suggestions");
-        }
+        if (!response.ok) throw new Error("Failed to get suggestions");
 
         const data = await response.json();
         setSuggestions(data);
-
-        // Lấy tất cả item từ nhiều gợi ý
-        const allItems = data.flatMap((sug) => sug.items);
-
-        // Đếm tần suất từng item
-        const itemCount = {};
-        allItems.forEach((item) => {
-          itemCount[item] = (itemCount[item] || 0) + 1;
-        });
-
-        // Tìm item có tần suất cao nhất
-        const topItem = Object.entries(itemCount).reduce(
-          (max, curr) => (curr[1] > max[1] ? curr : max),
-          ["", 0]
-        );
-
-        console.log("🎯 Item gợi ý nhiều nhất:", topItem[0]);
-
-        // Nếu bạn muốn lưu lại để sử dụng:
-        // setTopSuggestedItem(topItem[0]);
 
         const allSuggestedProducts = data.flatMap((sug) => sug.items);
         setSelectedItems(allSuggestedProducts);
@@ -113,6 +84,10 @@ const ProductSuggester = () => {
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const goToDetail = (product) => {
+    navigate("/DetailPage", { state: { product } });
   };
 
   return (
@@ -151,8 +126,14 @@ const ProductSuggester = () => {
                     src={product.image}
                     alt={product.name}
                     className="product-suggester__product-image"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
                   />
-                  <span className="product-suggester__product-name">
+                  <span
+                    className="product-suggester__product-name"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
+                  >
                     {product.name}
                   </span>
                   <button
@@ -167,68 +148,49 @@ const ProductSuggester = () => {
         </div>
       )}
 
-      {/*   
-      <div className="product-suggester__cart-items">
-        <h2 className="product-suggester__cart-title">
-          Sản phẩm trong giỏ hàng:
-        </h2>
-        {cartItems.length > 0 ? (
-          <ul className="product-suggester__cart-list">
-            {cartItems.map((item, idx) => (
-              <li key={idx} className="product-suggester__cart-item">
-                {item.name} (x{item.quantity})
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="product-suggester__cart-empty">
-            Giỏ hàng hiện đang trống.
-          </p>
-        )}
-      </div> */}
-
-      {/* Hiển thị danh sách gợi ý */}
       <section className="product-suggester__suggestions">
         <h2 className="product-suggester__suggestions-title">
           Gợi ý mua thêm:
         </h2>
         <div className="product-suggester__suggestions-container product-suggester__products-list--horizontal">
-          {suggestions.length === 0 && (
-            <>
-              {(() => {
-                const defaultCategory = categories.find(
-                  (c) => c.title === "Tablet"
-                );
-                if (!defaultCategory) return null;
+          {suggestions.length === 0 &&
+            (() => {
+              const defaultCategory = categories.find(
+                (c) => c.title === "Tablet"
+              );
+              if (!defaultCategory) return null;
 
-                return defaultCategory.items.map((product) => (
-                  <div
-                    key={product.name}
-                    className="product-suggester__product-item"
+              return defaultCategory.items.map((product) => (
+                <div
+                  key={product.name}
+                  className="product-suggester__product-item"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="product-suggester__product-image"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
+                  />
+                  <span
+                    className="product-suggester__product-name"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
                   >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="product-suggester__product-image"
-                    />
-                    <span className="product-suggester__product-name">
-                      {product.name}
-                    </span>
-                    <button
-                      className="product-suggester__add-button"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      Thêm vào giỏ hàng
-                    </button>
-                  </div>
-                ));
-              })()}
-            </>
-          )}
+                    {product.name}
+                  </span>
+                  <button
+                    className="product-suggester__add-button"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Thêm vào giỏ hàng
+                  </button>
+                </div>
+              ));
+            })()}
 
           {suggestions.length > 0 &&
             (() => {
-              // Gom các sản phẩm duy nhất từ suggestions
               const productMap = new Map();
 
               suggestions.forEach((sug) => {
@@ -276,8 +238,14 @@ const ProductSuggester = () => {
                     src={product.image}
                     alt={product.name}
                     className="product-suggester__product-image"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
                   />
-                  <span className="product-suggester__product-name">
+                  <span
+                    className="product-suggester__product-name"
+                    onClick={() => goToDetail(product)}
+                    style={{ cursor: "pointer" }}
+                  >
                     {product.name}
                   </span>
                   <button
@@ -292,7 +260,6 @@ const ProductSuggester = () => {
         </div>
       </section>
 
-      {/* Danh sách sản phẩm để chọn (checkbox) */}
       <div>
         {categories.map((category) => (
           <div key={category.title} className="product-suggester__category">
@@ -320,12 +287,17 @@ const ProductSuggester = () => {
                       src={product.image}
                       alt={product.name}
                       className="product-suggester__product-image"
+                      onClick={() => goToDetail(product)}
+                      style={{ cursor: "pointer" }}
                     />
-                    <span className="product-suggester__product-name">
+                    <span
+                      className="product-suggester__product-name"
+                      onClick={() => goToDetail(product)}
+                      style={{ cursor: "pointer" }}
+                    >
                       {product.name}
                     </span>
                   </label>
-
                   <button
                     className="product-suggester__add-button"
                     onClick={() => handleAddToCart(product)}

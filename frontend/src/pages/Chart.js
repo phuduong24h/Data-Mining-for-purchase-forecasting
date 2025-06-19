@@ -229,7 +229,7 @@ const ChartPage = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", marginBottom: "100px" }}>
       <div
         style={{
           height: "550px",
